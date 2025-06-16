@@ -122,13 +122,16 @@ client.on('interactionCreate', async interaction => {
 client.login(process.env.DISCORD_TOKEN);
 
 // --- WEB SERVER FOR HOSTING ---
-// This part remains the same
 const express = require('express');
 const app = express();
-const port = 3000;
+// This is the updated line:
+const port = process.env.PORT || 3000;
+
 app.get('/', (req, res) => {
   res.send('Verification bot is alive!');
 });
+
 app.listen(port, () => {
-  console.log(`UptimeRobot server listening on port ${port}`);
+  console.log(`Web server listening on port ${port}`);
 });
+// --- END WEB SERVER ---
