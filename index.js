@@ -53,7 +53,22 @@ client.once('ready', async () => {
 
 // --- EVENT: NEW MEMBER JOINS ---
 client.on('guildMemberAdd', async member => {
-  // This part remains the same
+  try {
+    // This line finds the "Unverified" role in your server using the ID you provided
+    const unverifiedRole = await member.guild.roles.fetch(UNVERIFIED_ROLE_ID);
+
+    // THIS IS THE EXACT LINE THAT ASSIGNS THE ROLE:
+    // It checks if the role was found, and then adds it to the new member.
+    if (unverifiedRole) await member.roles.add(unverifiedRole);
+
+    // This part just sends the welcome message to your verification channel
+    const welcomeChannel = await client.channels.fetch(VERIFICATION_CHANNEL_ID);
+    if (welcomeChannel) {
+      await welcomeChannel.send(`Welcome, ${member}! Please use the \`/verify\` command to get access.`);
+    }
+  } catch (error) {
+    console.error('Error in guildMemberAdd event:', error);
+  }
 });
 
 // --- EVENT: SLASH COMMAND IS USED ---
